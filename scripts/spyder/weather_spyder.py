@@ -1,14 +1,19 @@
 import requests as rq
 from bs4 import BeautifulSoup as bs
 import os, sys, io
+import datetime as dt
+import pandas as pd
+import numpy as np
 
 if os.name == 'nt': # Check if the system is Windows-NT
 	sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8') # Change the standard output codec to UTF-8
 
+def handle_empty(s):
+	return s and s.strip()
 
 class weather_spyder:
 	def __init__(self):
-		self.url = 'http://tianqi.com'
+		self.url = 'http://lishi.tianqi.com/'
 		self.headers = {
 			# GET /20160601.html HTTP/1.1
 			'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
@@ -21,9 +26,10 @@ class weather_spyder:
 			}
 	
 	def get_data(self, city, time):
-		url = self.url[:7]+city+'.'+self.url[7:]+'/'+time+'.html'
+		# url = self.url[:7]+city+'.'+self.url[7:]+'/'+time+'.html'
+		url = self.url+city+'/'+time+'.html'
 		page = rq.get(url, headers=self.headers)
-		self.soup = bs(page.text, "lxml")
+		self.soup = bs(page.content.decode('gbk'), "lxml")
 		# print(self.soup.prettify())
 		tag = self.soup.div
 		while True:
@@ -31,22 +37,35 @@ class weather_spyder:
 				# print(tag)
 				a = tag["class"]
 				# print(a[0])
-				if a[0] == 'tqshow':
-					print(tag.getText())
-					break
+				if a[0] == 'tqtongji2':
+					return tag.getText()
 				else:
 					tag = tag.findNext()
 			except BaseException:
 				tag = tag.findNext()
 
-		# print(self.soup.prettify())
-
-
-
 	def run(self):
-		city = 'shanghai'
-		time = '20160601'
-		self.get_data(city, time)
+		col = ['日期', '最高气温', '最低气温', '天气', '风向', '风力']
+		cities = ['shanghai']
+		# start = dt.date(2011, 1, 1)
+		# dates = [(start+dt.timedelta(days=i)).strftime('%Y%m%d') for i in range(2008)]
+		years = ['2011', '2012', '2013', '2014', '2015', '2016']
+		months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+		dates = [i+j for i in years for j in months][:-6]
+
+		for city in cities:
+			rowlist = []
+			# table = pd.DataFrame(columns = col)
+			for date in dates:
+				a = self.get_data(city, date)
+				data = list(filter(handle_empty, a.split('\n')))[6:]
+				for i in range(int(len(data)/6)):
+					row = zip(col, data[6*i:6*i+6])
+					# print(dict(row))
+					# table.append(dict(row), ignore_index=True)
+					rowlist.append(dict(row))
+			table = pd.DataFrame(rowlist, columns=col)
+			table.to_csv('E:\\Desktop\\data\\'+city+'.csv', if_exists = 'replace')
 
 if __name__ == '__main__':
 	a = weather_spyder()
