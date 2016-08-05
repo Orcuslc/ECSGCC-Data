@@ -55,6 +55,9 @@ Notes
 			- Cost of error $C$
 			- $\gamma$
 	- Search for Proper parameters:
-		
-
+		- Divide the training data into 2 sets, one used to train, the other to validate and evaluate.
+		- Validation:
+			- For time-series-based approaches, extract some time periods to form the validation set.
+			- For non-time-series models, conduct tenfold cross validation. Randomly divide training into 10 sets, using each set as validation, then train a model on the rest. 
+			
 
