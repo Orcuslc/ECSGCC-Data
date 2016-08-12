@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime as dt
+from tools.modified_svm import *
 
 def read_data(data_path):
 	data = pd.read_csv(data_path, encoding='gbk')
@@ -16,8 +17,8 @@ def scale_data(data):
 	normalized_load_list = load_list/load_list.max()
 
 def segment(data):
-	
-	
+
+
 if __name__ == '__main__':
 	data_path = 'E:\\Desktop\\ECSGCC\\data\\load.csv'
 	data = read_data(data_path)
