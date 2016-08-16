@@ -77,7 +77,8 @@ def get_calender_detail(start, end, if_raw = True):
 	return df
 
 def set_calender_attr(time_list):
-	pass
+	for time in time_list:
+		pass
 
 def set_attr(data):
 	pass
