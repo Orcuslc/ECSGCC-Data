@@ -4,7 +4,7 @@ import numpy as np
 import datetime as dt
 # from tools.modified_svm import *
 # from sklearn.ensemble import RandomForestClassifier
-# from 'E:\\Chuan\\Documents\\libsvm-3.21\\python' import *
+from svmutil import *
 
 # We use the libsvm provided by http://www.csie.ntu.edu.tw/~cjlin/libsvm/ and the Python interface it provided within.
 
@@ -34,7 +34,8 @@ def read_data(data_path):
 	time_list = data['time'].tolist()
 	load_list = np.asarray(data['load'].tolist(), dtype = np.float)
 	load_list = np.where(np.isnan(load_list), 0, load_list) # Convert all np.nan in load_list to 0
-	return np.asarray([time_list, load_list])
+	#return np.asarray([time_list, load_list])
+	return np.asarray(list(zip(time_list, load_list)))
 
 def scale_data(data):
 	time_list = data[0]
@@ -72,27 +73,27 @@ def get_calender_detail(start, end, if_raw = True):
 	delta = (end - start).days
 	date_list = [start+dt.timedelta(i) for i in range(delta+1)]
 	detail = list(map(lambda x:handle_holiday(x, if_raw=False), date_list))
-	df = pd.DataFrame(detail)
+	date = pd.Series([item['date'] for item in detail])
+	df = pd.DataFrame(detail, index = date)
 	# print(df)
 	return df
-
-def set_calender_attr(time_list):
-	for time in time_list:
-		pass
 
 def set_attr(data):
 	pass
 
+def run(data_path, calendar_path):
+	data = read_data(data_path)
+	calendar = pd.read_csv(calendar_path)
+	print(calendar)
+
 
 if __name__ == '__main__':
-	# data_path = 'E:\\Desktop\\ECSGCC\\data\\load.csv'
-	# data = read_data(data_path)
-	# date = dt.date(2009, 10, 27)
-	# a = handle_holiday(date, if_raw=False)
-	# print(a)
+	date_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar1.csv'
 	start = '20090101'
 	end = '20161231'
-	date_path = 'E:\\Chuan\\Documents\\GitHub\\ECSGCC-data\\Load-Data\\calender.csv'
 	df = get_calender_detail(start, end)
 	df.to_csv(date_path)
-	# print(get_calender_detail(start, end))
+	#print(get_calender_detail(start, end))
+	#data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
+	#calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
+	#run(data_path, calendar_path)
