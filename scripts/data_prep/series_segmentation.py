@@ -79,13 +79,31 @@ def get_calender_detail(start, end, if_raw = True):
 	# print(df)
 	return df
  
-def set_attr(data, calendar_path):
+def set_attr(data, calendar_path, attr_path):
 	calendar = pd.read_csv(calendar_path, index_col = 'date')
 	complete_data = []
 	for index in range(7, len(data)):
-		record = data[index]
-		time = record[0]
-		load = record[1]
+		record = data.iloc[index]
+		time = record['dates']
+		load = record['max_load']
+		cal_data = calendar.loc[int(time)]
+		holiday = cal_data['holiday']
+		weekend = cal_data['weekend']
+		weekday = cal_data['weekday']
+		ndays_back = 7
+		past_load_data = []
+		for i in range(1, 8):
+			record = data.iloc[index - i]
+			past_load_data.append(record['max_load'])
+		complete_data.append((past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday))
+	with open(attr_path, 'w') as f:
+		for item in complete_data:
+			string = ''
+			for data in item:
+				string = string + str(data) + '\t'
+			f.write(string+'\n')
+	f.close()
+
 
 def handle_date_format(date):
 	date = date.split('/')
@@ -98,13 +116,12 @@ def handle_date_format(date):
 		day = '0' + day
 	return year + month + day
 		
-def run(max_load_path, calendar_path):
+def run(max_load_path, calendar_path, attr_path):
 	data = pd.read_csv(max_load_path, encoding='gbk')
 	dates = data['dates'].tolist()
 	dates = list(map(handle_date_format, dates))
 	data['dates'] = dates
-	print(data)
-
+	set_attr(data, calendar_path, attr_path)
 
 if __name__ == '__main__':
 	#date_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar1.csv'
@@ -117,4 +134,5 @@ if __name__ == '__main__':
 	data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
 	calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
 	max_load_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-max-load.csv'
-	run(max_load_path, calendar_path)
+	attr_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/attr.txt'
+	run(max_load_path, calendar_path, attr_path)
