@@ -23,12 +23,16 @@ def get_max_load(data_path, date_index_path, max_load_path):
 	plt.gcf().autofmt_xdate()
 	plt.gca().xaxis.grid(True)
 	plt.gca().yaxis.grid(True)
-	date_load = pd.DataFrame({'date':date_index['date'][:-1], 'max_load':max_load_list})
+	dates = pd.Series(date_index['date'][:-1], name = 'dates')
+	date_load = pd.DataFrame({'max_load': max_load_list}, index = dates)
 	date_load.to_csv(max_load_path)
 	plt.show()
 
 if __name__ == '__main__':
-	data_path = 'E:\\Desktop\\data\\load.csv'
-	date_index_path = 'E:\\Chuan\\Documents\\GitHub\\ECSGCC-data\\DATA for Loads\\date-index.csv'
-	max_load_path = 'E:\\Chuan\\Documents\\GitHub\\ECSGCC-data\\DATA for Loads\\date-load.csv'
+	# data_path = 'E:\\Desktop\\data\\load.csv'
+	# date_index_path = 'E:\\Chuan\\Documents\\GitHub\\ECSGCC-data\\DATA for Loads\\date-index.csv'
+	# max_load_path = 'E:\\Chuan\\Documents\\GitHub\\ECSGCC-data\\DATA for Loads\\date-load.csv'
+	data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
+	date_index_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-index.csv'
+	max_load_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-max-load.csv'
 	get_max_load(data_path, date_index_path, max_load_path)

@@ -73,27 +73,48 @@ def get_calender_detail(start, end, if_raw = True):
 	delta = (end - start).days
 	date_list = [start+dt.timedelta(i) for i in range(delta+1)]
 	detail = list(map(lambda x:handle_holiday(x, if_raw=False), date_list))
-	date = pd.Series([item['date'] for item in detail])
+	date = pd.Series([item['date'] for item in detail], name = 'date')
+	detail = [{'holiday':item['holiday'], 'weekend':item['weekend'], 'weekday':item['weekday']} for item in detail]
 	df = pd.DataFrame(detail, index = date)
 	# print(df)
 	return df
+ 
+def set_attr(data, calendar_path):
+	calendar = pd.read_csv(calendar_path, index_col = 'date')
+	complete_data = []
+	for index in range(7, len(data)):
+		record = data[index]
+		time = record[0]
+		load = record[1]
 
-def set_attr(data):
-	pass
-
-def run(data_path, calendar_path):
-	data = read_data(data_path)
-	calendar = pd.read_csv(calendar_path)
-	print(calendar)
+def handle_date_format(date):
+	date = date.split('/')
+	year = date[0]
+	month = date[1]
+	day = date[2]
+	if len(month) == 1:
+		month = '0' + month
+	if len(day) == 1:
+		day = '0' + day
+	return year + month + day
+		
+def run(max_load_path, calendar_path):
+	data = pd.read_csv(max_load_path, encoding='gbk')
+	dates = data['dates'].tolist()
+	dates = list(map(handle_date_format, dates))
+	data['dates'] = dates
+	print(data)
 
 
 if __name__ == '__main__':
-	date_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar1.csv'
-	start = '20090101'
-	end = '20161231'
-	df = get_calender_detail(start, end)
-	df.to_csv(date_path)
-	#print(get_calender_detail(start, end))
-	#data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
-	#calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
-	#run(data_path, calendar_path)
+	#date_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar1.csv'
+	#start = '20090101'
+	#end = '20161231'
+	#df = get_calender_detail(start, end)
+	#df.to_csv(date_path)
+
+
+	data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
+	calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
+	max_load_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-max-load.csv'
+	run(max_load_path, calendar_path)
