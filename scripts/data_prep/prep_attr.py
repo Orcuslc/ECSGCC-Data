@@ -37,11 +37,11 @@ def read_data(data_path):
 	#return np.asarray([time_list, load_list])
 	return np.asarray(list(zip(time_list, load_list)))
 
-def scale_data(data):
-	time_list = data[0]
-	load_list = np.asarray(data[1], dtype = np.float)
+def scale_data(load):
+	load_list = np.asarray(load, dtype = np.float)
+	load_list = np.where(np.isnan(load_list), 0, load_list)
 	normalized_load_list = load_list/load_list.max()
-	return normalized_load_list
+	return normalized_load_list.tolist()
 
 def handle_holiday(rawdate, if_raw = True):
 	if if_raw == True:
@@ -95,12 +95,12 @@ def set_attr(data, calendar_path, attr_path):
 		for i in range(1, 8):
 			record = data.iloc[index - i]
 			past_load_data.append(record['max_load'])
-		complete_data.append((past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday))
+		complete_data.append((load, past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday))
 	with open(attr_path, 'w') as f:
 		for item in complete_data:
 			string = ''
 			for data in item:
-				string = string + str(data) + '\t'
+				string = string + str(data) + ' '
 			f.write(string+'\n')
 	f.close()
 
@@ -118,9 +118,12 @@ def handle_date_format(date):
 		
 def run(max_load_path, calendar_path, attr_path):
 	data = pd.read_csv(max_load_path, encoding='gbk')
+	loads = data['max_load'].tolist()
+	norm_loads = scale_data(loads)
 	dates = data['dates'].tolist()
 	dates = list(map(handle_date_format, dates))
 	data['dates'] = dates
+	data['max_load'] = norm_loads
 	set_attr(data, calendar_path, attr_path)
 
 
