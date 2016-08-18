@@ -89,13 +89,15 @@ def set_attr(data, calendar_path, attr_path):
 		cal_data = calendar.loc[int(time)]
 		holiday = cal_data['holiday']
 		weekend = cal_data['weekend']
-		weekday = cal_data['weekday']
+		weekday = cal_data['weekday'] - 1
+		#weekday = [[0,0,0,0,0,1],[0,0,0,0,1,0],[0,0,0,1,0,0],[0,0,1,0,0,0],[0,1,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]][weekday]
 		ndays_back = 7
 		past_load_data = []
 		for i in range(1, 8):
 			record = data.iloc[index - i]
 			past_load_data.append(record['max_load'])
-		complete_data.append((load, past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday))
+		#complete_data.append((load, past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday[0], weekday[1], weekday[2], weekday[3], weekday[4], weekday[5]))
+		complete_data.append((load, past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend))
 	with open(attr_path, 'w') as f:
 		for item in complete_data:
 			string = ''
@@ -138,5 +140,5 @@ if __name__ == '__main__':
 	data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
 	calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
 	max_load_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-max-load.csv'
-	attr_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/attr.txt'
+	attr_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/attr-1.txt'
 	run(max_load_path, calendar_path, attr_path)
