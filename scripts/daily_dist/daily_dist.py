@@ -30,7 +30,7 @@ def clean_data(load_data):
 	data.to_csv(load_data)
 
 def normalize(x):
-	return np.asarray(x)/max(x)
+	return (np.asarray(x)/max(x)).tolist()
 
 def get_time_list(start, end):
 	td = dt.datetime(2001, 1, 1, 0, 30, 0) - dt.datetime(2001, 1, 1, 0, 0, 0)
@@ -42,10 +42,18 @@ def get_time_list(start, end):
 def get_load_data(start, end, load_data):
 	data = pd.read_csv(load_data, encoding='gbk', index_col = 'time1')
 	time_list = get_time_list(start, end)[:-1]
-	load_data = data.loc[time_list].tolist()
+	load_data = data.loc[time_list]['load1'].tolist()
 	#print(load_data)
 	ndays = int(len(load_data)/48)
-	daily_load = 
+	daily_load = []
+	for i in range(ndays):
+		daily_load.append(normalize(load_data[i*48:(i+1)*48]))
+	#print(daily_load)
+	for i in daily_load:
+		plt.scatter(range(48), i)
+	plt.show()
+	return daily_load
+	
 
 
 if __name__ == '__main__':
@@ -53,4 +61,4 @@ if __name__ == '__main__':
 	#clean_data(load_data)
 	#a = get_time_list('20110101', '20110103')
 	#print(a)
-	get_load_data('20100101', '20100103', load_data)
+	get_load_data('20091101', '20100201', load_data)
