@@ -8,7 +8,6 @@ from svmutil import *
 
 # We use the libsvm provided by http://www.csie.ntu.edu.tw/~cjlin/libsvm/ and the Python interface it provided within.
 
-# 2015: 0927 中秋未将0926计入
 holiday = {
 	'2016':['0101','0102','0103','0207','0208','0209','0210','0211','0212','0213','0402','0403','0404','0430','0501','0502','0609','0610','0611','0915','0916','0917','1001','1002','1003','1004','1005','1006','1007'],
 	'2015':['0101','0102','0103','0218','0219','0220','0221','0222','0223','0224','0225','0404','0405','0406','0501','0502','0503','0620','0621','0622','0903','0904','0905','0927','1001','1002','1003','1004','1005','1006','1007'],
@@ -82,7 +81,8 @@ def get_calender_detail(start, end, if_raw = True):
 def set_attr(data, calendar_path, attr_path):
 	calendar = pd.read_csv(calendar_path, index_col = 'date')
 	complete_data = []
-	for index in range(7, len(data)):
+	ndays_back = 7
+	for index in range(ndays_back, len(data)):
 		record = data.iloc[index]
 		time = record['dates']
 		load = record['max_load']
@@ -91,9 +91,8 @@ def set_attr(data, calendar_path, attr_path):
 		weekend = cal_data['weekend']
 		weekday = cal_data['weekday'] - 1
 		#weekday = [[0,0,0,0,0,1],[0,0,0,0,1,0],[0,0,0,1,0,0],[0,0,1,0,0,0],[0,1,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]][weekday]
-		ndays_back = 7
 		past_load_data = []
-		for i in range(1, 8):
+		for i in range(1, ndays_back+1):
 			record = data.iloc[index - i]
 			past_load_data.append(record['max_load'])
 		#complete_data.append((load, past_load_data[0], past_load_data[1], past_load_data[2], past_load_data[3], past_load_data[4], past_load_data[5], past_load_data[6], holiday, weekend, weekday[0], weekday[1], weekday[2], weekday[3], weekday[4], weekday[5]))

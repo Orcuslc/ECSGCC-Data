@@ -1,4 +1,4 @@
-from svmutil import *
+# from svmutil import *
 import numpy as np
 from sklearn.svm import SVR
 from matplotlib import pyplot as plt
@@ -12,6 +12,7 @@ def calc_err(pred, real):
 	avgerr = np.average(err)
 	maxerr = max(err)
 	minerr = min(err)
+	print((np.where(err>0.2)))
 	print(avgerr, maxerr, minerr)
 	return avgerr, maxerr, minerr
 
@@ -139,8 +140,8 @@ if __name__ == '__main__':
 
 	n = 730
 	#test1(n)
-	#test2()
-	test1(n)
+	test2()
+	#test1(n)
 	#test3()
 	#test4()
 
