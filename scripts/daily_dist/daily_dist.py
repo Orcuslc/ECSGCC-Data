@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import datetime as dt
+from matplotlib import pyplot as plt
 
 load_data = '../../Load-Data/load_before_2013_clean.csv'
 
@@ -41,8 +42,11 @@ def get_time_list(start, end):
 def get_load_data(start, end, load_data):
 	data = pd.read_csv(load_data, encoding='gbk', index_col = 'time1')
 	time_list = get_time_list(start, end)[:-1]
-	load_data = data.loc[time_list]
-	print(load_data)
+	load_data = data.loc[time_list].tolist()
+	#print(load_data)
+	ndays = int(len(load_data)/48)
+	daily_load = 
+
 
 if __name__ == '__main__':
 	#get_time_list(1)
