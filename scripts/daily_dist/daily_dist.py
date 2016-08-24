@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 
 load_data = '../../Load-Data/load_before_2013_clean.csv'
 
+# Load data starts from 2009-09-11
+
 def clean_data(load_data):
 	data = pd.read_csv(load_data, encoding='gbk', index_col = 'time1')
 	index = data.index.tolist()
@@ -29,6 +31,8 @@ def clean_data(load_data):
 	data.index = pd.Series(index, name = 'time1')
 	data.to_csv(load_data)
 
+def 
+
 def normalize(x):
 	return (np.asarray(x)/max(x)).tolist()
 
@@ -50,15 +54,33 @@ def get_load_data(start, end, load_data):
 		daily_load.append(normalize(load_data[i*48:(i+1)*48]))
 	#print(daily_load)
 	for i in daily_load:
-		plt.scatter(range(48), i)
+		plt.plot(range(48), i)
 	plt.show()
 	return daily_load
-	
 
+def calc_avg(daily_load):
+	ndays = len(daily_load)
+	daily_load = np.asarray(daily_load)
+	print(np.where(np.isnan(daily_load)))
+	avg = np.average(daily_load, axis=0)
+	err = daily_load - avg
+	err_time = [np.around(err[:, i], decimals=3).tolist() for i in range(48)]
+	err_time_set = [list(set(item)) for item in err_time]
+	#print(err_time_set)
+	err_dist = [{} for i in range(48)]
+	for i in range(48):
+		for err in err_time_set[i]:
+			count = err_time[i].count(err)
+			err_dist[i][err] = count
+			#print(err_dist)
+	return err_dist
 
 if __name__ == '__main__':
 	#get_time_list(1)
 	#clean_data(load_data)
 	#a = get_time_list('20110101', '20110103')
 	#print(a)
-	get_load_data('20091101', '20100201', load_data)
+	daily_load = get_load_data('20090911', '20091201', load_data)
+	err_dist = calc_avg(daily_load)
+	#print(err_dist)
+	#get_load_data('20091101', '20100701', load_data)
