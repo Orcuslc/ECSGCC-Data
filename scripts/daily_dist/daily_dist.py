@@ -8,7 +8,7 @@ load_data = '../../Load-Data/load_before_2013_clean.csv'
 # Load data starts from 2009-09-11
 
 def clean_data(load_data):
-	data = pd.read_csv(load_data, encoding='gbk', index_col = 'time1')
+	data = pd.read_csv(load_data, encoding = 'gbk', index_col = 'time1')
 	index = data.index.tolist()
 	#index = [i if len(i) > 10 else i + ' 00:00:00' for i in index]
 	def _handle(item):
@@ -31,7 +31,10 @@ def clean_data(load_data):
 	data.index = pd.Series(index, name = 'time1')
 	data.to_csv(load_data)
 
-def 
+def complete_data(load_data, time_list):
+	data = pd.read_csv(load_data, encoding = 'gbk', index_col = 'time1')
+	load_data = data.loc[time_list]['load1']
+	print(load_data)
 
 def normalize(x):
 	return (np.asarray(x)/max(x)).tolist()
@@ -61,8 +64,8 @@ def get_load_data(start, end, load_data):
 def calc_avg(daily_load):
 	ndays = len(daily_load)
 	daily_load = np.asarray(daily_load)
-	print(np.where(np.isnan(daily_load)))
-	avg = np.average(daily_load, axis=0)
+	#print(np.where(np.isnan(daily_load)))
+	avg = np.nanmean(daily_load, axis=0)
 	err = daily_load - avg
 	err_time = [np.around(err[:, i], decimals=3).tolist() for i in range(48)]
 	err_time_set = [list(set(item)) for item in err_time]
@@ -82,5 +85,8 @@ if __name__ == '__main__':
 	#print(a)
 	daily_load = get_load_data('20090911', '20091201', load_data)
 	err_dist = calc_avg(daily_load)
-	#print(err_dist)
+	print(err_dist)
 	#get_load_data('20091101', '20100701', load_data)
+
+	#time_list = get_time_list('20090911', '20110915')
+	#complete_data(time_list, time_list)
