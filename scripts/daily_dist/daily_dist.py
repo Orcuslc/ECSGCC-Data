@@ -40,19 +40,24 @@ def complete_data(load_data, time_list):
 def normalize(x):
 	return (np.asarray(x)/max(x)).tolist()
 
-#def is_weekend(x):
+def is_weekend(x):
+	return dt.date.isoweekday(x) not in [6, 7]
+#def 
 
-
-def get_time_list(start, end):
+def get_time_list(start, end, drop_weekend = False):
 	td = dt.datetime(2001, 1, 1, 0, 30, 0) - dt.datetime(2001, 1, 1, 0, 0, 0)
 	start = dt.datetime(int(start[:4]), int(start[4:6]), int(start[6:]))
 	end = dt.datetime(int(end[:4]), int(end[4:6]), int(end[6:]))
-	num = int((end - start)/td)
-	return [(start+i*td).strftime('%Y-%m-%d %H:%M:%S') for i in range(num+1)]
+	num = int((end - start)/td)	
+	if drop_weekend == True:
+		return [i.strftime('%Y-%m-%d %H:%M:%S') for i in list(filter(is_weekend, [start+i*td for i in range(num+1)]))]
+	else:
+		return [(start+i*td).strftime('%Y-%m-%d %H:%M:%S') for i in range(num+1)]
 
-def get_load_data(start, end, load_data):
+
+def get_load_data(start, end, load_data, drop_weekend = False):
 	data = pd.read_csv(load_data, encoding='gbk', index_col = 'time1')
-	time_list = get_time_list(start, end)[:-1]
+	time_list = get_time_list(start, end, drop_weekend)[:-1]
 	load_data = data.loc[time_list]['load1'].tolist()
 	#print(load_data)
 	ndays = int(len(load_data)/48)
@@ -70,6 +75,10 @@ def calc_dist(daily_load):
 	daily_load = np.asarray(daily_load)
 	#print(np.where(np.isnan(daily_load)))
 	avg = np.nanmean(daily_load, axis=0)
+	for i in daily_load:
+		plt.plot(range(48), i, color = 'blue')
+	plt.plot(range(48), avg, linewidth = 1, color = 'red')
+	plt.show()
 	err = daily_load - avg
 	err_time = [np.around(err[:, i], decimals=2).tolist() for i in range(48)]
 	err_time_set = [list(set(item)) for item in err_time]
@@ -112,11 +121,13 @@ if __name__ == '__main__':
 	#clean_data(load_data)
 	#a = get_time_list('20110101', '20110103')
 	#print(a)
+	#daily_load = get_load_data('20130911', '20160725', load_data)
 	daily_load = get_load_data('20090911', '20130901', load_data)
+
 	#print(daily_load)
 	err_dist = calc_dist(daily_load)
 	#print(err_dist)
-	save_dist(err_dist)
+	#save_dist(err_dist)
 	#print(err_dist)
 	#get_load_data('20091101', '20100701', load_data)
 
