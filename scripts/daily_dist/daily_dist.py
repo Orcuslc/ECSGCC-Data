@@ -4,6 +4,7 @@ import datetime as dt
 from matplotlib import pyplot as plt
 
 load_data = '../../Load-Data/load_before_2013_clean.csv'
+dist_path = '../../Load-Data/dist_before_2013.txt'
 
 # Load data starts from 2009-09-11
 
@@ -39,6 +40,9 @@ def complete_data(load_data, time_list):
 def normalize(x):
 	return (np.asarray(x)/max(x)).tolist()
 
+#def is_weekend(x):
+
+
 def get_time_list(start, end):
 	td = dt.datetime(2001, 1, 1, 0, 30, 0) - dt.datetime(2001, 1, 1, 0, 0, 0)
 	start = dt.datetime(int(start[:4]), int(start[4:6]), int(start[6:]))
@@ -58,34 +62,62 @@ def get_load_data(start, end, load_data):
 	#print(daily_load)
 	for i in daily_load:
 		plt.plot(range(48), i)
-	plt.show()
+	#plt.show()
 	return daily_load
 
-def calc_avg(daily_load):
+def calc_dist(daily_load):
 	ndays = len(daily_load)
 	daily_load = np.asarray(daily_load)
 	#print(np.where(np.isnan(daily_load)))
 	avg = np.nanmean(daily_load, axis=0)
 	err = daily_load - avg
-	err_time = [np.around(err[:, i], decimals=3).tolist() for i in range(48)]
+	err_time = [np.around(err[:, i], decimals=2).tolist() for i in range(48)]
 	err_time_set = [list(set(item)) for item in err_time]
 	#print(err_time_set)
 	err_dist = [{} for i in range(48)]
 	for i in range(48):
 		for err in err_time_set[i]:
+			if np.isnan(err):
+				continue
 			count = err_time[i].count(err)
 			err_dist[i][err] = count
 			#print(err_dist)
 	return err_dist
+
+def save_dist(err_dist):
+	with open(dist_path, 'w') as f:
+		for item in err_dist:
+			#print(type(item))
+			#count = 0
+			#for key, value in item.items():
+			#	if not np.isnan(value):
+			#		count += 1
+			count = 0
+			for key, value in item.items():
+				count += value
+			for key, value in item.items():
+				#if not np.isnan(value):
+					#print(value, count)
+				rate = np.around(value/count, decimals=3)
+				#print(rate)
+				#if rate >= 1.0:
+				#	rate = 1
+				f.write(str(key)+':'+str(rate)+',')
+			f.write('\n')
+	f.close()
+
 
 if __name__ == '__main__':
 	#get_time_list(1)
 	#clean_data(load_data)
 	#a = get_time_list('20110101', '20110103')
 	#print(a)
-	daily_load = get_load_data('20090911', '20091201', load_data)
-	err_dist = calc_avg(daily_load)
-	print(err_dist)
+	daily_load = get_load_data('20090911', '20130901', load_data)
+	#print(daily_load)
+	err_dist = calc_dist(daily_load)
+	#print(err_dist)
+	save_dist(err_dist)
+	#print(err_dist)
 	#get_load_data('20091101', '20100701', load_data)
 
 	#time_list = get_time_list('20090911', '20110915')
