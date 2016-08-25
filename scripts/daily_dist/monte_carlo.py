@@ -36,9 +36,17 @@ class Monte_Carlo:
 							[[2, 0.12], [3, 0.13], [4, 0.75]]
 						]
 		'''
-		self.dists = dists
-		
-	def 
+		self.dists = np.asarray(dists)
+
+	def simulation(self, adist, number):
+		values = adist[:, 0]
+		probs = adist[:, 1]
+		probs = probs/sum(probs)
+		accumulate_probs = np.asarray([sum(probs[:i+1]) for i in range(len(probs))])
+		p_list = [random.random() for i in range(number)]
+		loc_list = [np.where(accumulate_probs <= p_list[i])[0][-1] for i in range(number)]
+		return [values[i] for i in loc_list]
+
 
 
 if __name__ == '__main__':
