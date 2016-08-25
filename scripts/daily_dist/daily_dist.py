@@ -65,16 +65,18 @@ def get_load_data(start, end, load_data, drop_weekend = False):
 	for i in range(ndays):
 		daily_load.append(normalize(load_data[i*48:(i+1)*48]))
 	#print(daily_load)
-	for i in daily_load:
-		plt.plot(range(48), i)
+	#for i in daily_load:
+	#	plt.plot(range(48), i)
 	#plt.show()
 	return daily_load
 
-def plot_load(daily_load, avg):
+def plot_load(daily_load):
+	avg = np.nanmean(daily_load, axis=0)	
 	for i in daily_load:
 		plt.plot(range(48), i, color = 'blue')
 	plt.plot(range(48), avg, linewidth = 1, color = 'red')
 	return plt
+
 
 def calc_dist(daily_load):
 	ndays = len(daily_load)
