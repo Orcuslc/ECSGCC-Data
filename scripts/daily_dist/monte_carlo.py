@@ -48,6 +48,9 @@ class Monte_Carlo:
 		sim = self.simulation(number)
 		return [[sum(item)/number] for item in self.simulation(number)]
 
+	def calc_err(self, sim, data):
+		return (np.avearge(np.asarray(sim), axis=1-np.average(np.asarray(data), axis=0))
+
 def draw(start, end, load_path):
 	daily_load = get_load_data(start, end, load_path)
 	avg = np.nanmean(daily_load, axis=0)
@@ -57,6 +60,9 @@ def draw(start, end, load_path):
 	pred = np.asarray([item[0] for item in predict]) + avg
 	plt.plot(range(48), pred, color = 'green')
 	plt.show()
+
+# def calc_err():
+
 
 
 if __name__ == '__main__':
