@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from daily_dist import *
 
 daily_dist = '../../Load-Data/dist_before_2013.txt'
 
@@ -9,16 +10,6 @@ def read_dist(daily_dist):
 		dists = [item.split(',')[:-1] for item in times]
 		dists = [[item.split(':') for item in j] for j in dists]
 		return [[[float(x) for x in y] for y in z] for z in dists]
-
-
-# def Monte_Carlo(dist):
-# 	probs = np.asarray(dist)[:, 1]
-# 	print(probs.sum())
-
-# def run(daily_dist):
-# 	dists = read_dist(daily_dist)
-# 	for i in range(48):
-# 		Monte_Carlo(dists[i])
 
 class Monte_Carlo:
 	'''
@@ -38,7 +29,7 @@ class Monte_Carlo:
 		'''
 		self.dists = np.asarray(dists)
 
-	def simulation(self, adist, number):
+	def _simulation(self, adist, number):
 		values = adist[:, 0]
 		probs = adist[:, 1]
 		probs = probs/sum(probs)
@@ -46,6 +37,10 @@ class Monte_Carlo:
 		p_list = [random.random() for i in range(number)]
 		loc_list = [np.where(accumulate_probs <= p_list[i])[0][-1] for i in range(number)]
 		return [values[i] for i in loc_list]
+
+	def simulation(self, number):
+		return([self._simulation(adist, number) for adist in self.dists])
+
 
 
 

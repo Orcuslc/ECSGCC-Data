@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 load_data = '../../Load-Data/load_before_2013_clean.csv'
 dist_path = '../../Load-Data/dist_before_2013.txt'
-
+avg_path = '../../Load-Data/avg_before_2013.txt'
 # Load data starts from 2009-09-11
 
 def clean_data(load_data):
@@ -70,15 +70,17 @@ def get_load_data(start, end, load_data, drop_weekend = False):
 	#plt.show()
 	return daily_load
 
+def plot_load(daily_load, avg):
+	for i in daily_load:
+		plt.plot(range(48), i, color = 'blue')
+	plt.plot(range(48), avg, linewidth = 1, color = 'red')
+	return plt
+
 def calc_dist(daily_load):
 	ndays = len(daily_load)
 	daily_load = np.asarray(daily_load)
 	#print(np.where(np.isnan(daily_load)))
 	avg = np.nanmean(daily_load, axis=0)
-	for i in daily_load:
-		plt.plot(range(48), i, color = 'blue')
-	plt.plot(range(48), avg, linewidth = 1, color = 'red')
-	plt.show()
 	err = daily_load - avg
 	err_time = [np.around(err[:, i], decimals=2).tolist() for i in range(48)]
 	err_time_set = [list(set(item)) for item in err_time]
@@ -91,7 +93,7 @@ def calc_dist(daily_load):
 			count = err_time[i].count(err)
 			err_dist[i][err] = count
 			#print(err_dist)
-	return err_dist
+	return avg, err_dist
 
 def save_dist(err_dist):
 	with open(dist_path, 'w') as f:
@@ -115,6 +117,8 @@ def save_dist(err_dist):
 			f.write('\n')
 	f.close()
 
+def save_avg(avg):
+	np.savetxt(avg_path, avg)
 
 if __name__ == '__main__':
 	#get_time_list(1)
@@ -125,7 +129,8 @@ if __name__ == '__main__':
 	daily_load = get_load_data('20090911', '20130901', load_data)
 
 	#print(daily_load)
-	err_dist = calc_dist(daily_load)
+	avg, err_dist, plt = calc_dist(daily_load)
+	save_avg(avg)
 	#print(err_dist)
 	#save_dist(err_dist)
 	#print(err_dist)
