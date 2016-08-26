@@ -38,7 +38,7 @@ def complete_data(load_data, time_list):
 	print(load_data)
 
 def normalize(x):
-	return (np.asarray(x)/max(x)).tolist()
+	return ((np.asarray(x)-min(x))/(max(x)-min(x))).tolist()
 
 def is_weekend(x):
 	return dt.date.isoweekday(x) not in [6, 7]
@@ -74,7 +74,7 @@ def plot_load(daily_load):
 	avg = np.nanmean(daily_load, axis=0)	
 	for i in daily_load:
 		plt.plot(range(48), i, color = 'blue')
-	plt.plot(range(48), avg, linewidth = 1, color = 'red')
+	plt.plot(range(48), avg, linewidth = 2, color = 'red')
 	return plt
 
 
@@ -131,10 +131,10 @@ if __name__ == '__main__':
 	daily_load = get_load_data('20090911', '20130901', load_data)
 
 	#print(daily_load)
-	avg, err_dist, plt = calc_dist(daily_load)
+	avg, err_dist = calc_dist(daily_load)
 	save_avg(avg)
 	#print(err_dist)
-	#save_dist(err_dist)
+	save_dist(err_dist)
 	#print(err_dist)
 	#get_load_data('20091101', '20100701', load_data)
 
