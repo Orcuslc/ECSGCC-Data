@@ -33,6 +33,11 @@ class Monte_Carlo:
 		# print(self.dists)
 
 	def _simulation(self, adist, number):
+		'''
+			The simulation for a single distribution.
+			adist: The distribution
+			number: The number of outputs
+		'''
 		values = np.asarray([item[0] for item in adist])
 		probs = np.asarray([item[1] for item in adist])
 		probs = probs/sum(probs)
@@ -42,6 +47,10 @@ class Monte_Carlo:
 		return [values[i] for i in loc_list]
 
 	def simulation(self, number):
+		'''
+			The simulation for users
+			number: The length of output
+		'''
 		return([self._simulation(adist, number) for adist in self.dists])
 
 	def simulation_mean(self, number):
