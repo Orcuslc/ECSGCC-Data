@@ -4,7 +4,7 @@ import numpy as np
 import datetime as dt
 # from tools.modified_svm import *
 # from sklearn.ensemble import RandomForestClassifier
-from svmutil import *
+# from svmutil import *
 
 # We use the libsvm provided by http://www.csie.ntu.edu.tw/~cjlin/libsvm/ and the Python interface it provided within.
 
@@ -136,8 +136,8 @@ if __name__ == '__main__':
 	#df.to_csv(date_path)
 
 
-	data_path = '/media/Library/Desktop/ECSGCC/data/load.csv'
-	calendar_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/calendar.csv'
-	max_load_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/date-max-load.csv'
-	attr_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/attr-1.txt'
+	data_path = '../../Load-Data/load_before_2013_clean.csv'
+	calendar_path = '../../Load-Data/calendar.csv'
+	max_load_path = '../../Load-Data/date-max-load.csv'
+	attr_path = '../../Load-Data/attr.txt'
 	run(max_load_path, calendar_path, attr_path)
