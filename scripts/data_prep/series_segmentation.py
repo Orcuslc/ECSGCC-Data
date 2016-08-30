@@ -125,8 +125,8 @@ def test4():
 if __name__ == '__main__':
 
 
-	attr_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/attr-1.txt'
-	model_path = '/media/Library/Chuan/Documents/GitHub/ECSGCC-data/Load-Data/segment_model.txt'
+	attr_path = '../../Load-Data/attr-1.txt'
+	model_path = '../../Load-Data/segment_model.txt'
 	with open(attr_path) as f:
 		data = f.read().split('\n')
 	for index in range(len(data)):
@@ -139,8 +139,8 @@ if __name__ == '__main__':
 	x = [str2float(record[1:]) for record in data]
 
 	n = 730
-	#test1(n)
-	test2()
+	test1(n)
+	# test2()
 	#test1(n)
 	#test3()
 	#test4()
