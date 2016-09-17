@@ -25,14 +25,22 @@ def calc_err(pred, real):
 	avgerr = np.average(err)
 	maxerr = max(err)
 	minerr = min(err)
-	print(len(list((np.where(err>0.2)))[0]))
+	print(len(list((np.where(err>0.2)))[0]))	
+	print(len(list((np.where(err>0.1)))[0]))
 	print(avgerr, maxerr, minerr)
 	return avgerr, maxerr, minerr
 
 def test(n):
 	y1, x1 = y[:n], x[:n]
 	y2, x2 = y[n:], x[n:]
+	print(len(y2))
 	clf = SVR(C = C, gamma = gamma)
+	#weight = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4] + [1, 1, 2]
+	#weight = np.asarray(weight*n).reshape(n, 10)
+	#weight = np.asarray([[(1/n)*(n-i)**2] for i in range(n)])
+	#weight.shape = n, 
+	#print(weight.shape)
+	#clf.fit(x1, y1, sample_weight = weight)
 	clf.fit(x1, y1)
 	a = clf.predict(x2)
 	calc_err(a, y2)

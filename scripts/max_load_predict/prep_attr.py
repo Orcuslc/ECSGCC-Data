@@ -13,7 +13,7 @@ data = pd.read_csv(path, index_col = 'date')
 MAX_LOAD = 20000
 MIN_LOAD = 10000
 MAX_TEMP = 10
-DAYS_BACK = 7
+DAYS_BACK = 6
 
 def scale_load(data):
 	#print(min(data['max_load']))
@@ -40,15 +40,33 @@ def handle_weekday(weekday):
 	else:
 		return '0 0 0 0 0 0'
 
+#def handle_weekday(weekday):
+#	weekday = str(weekday)
+#	if weekday == '1':
+#		return '0'
+#	elif weekday == '2':
+#		return '0.1'
+#	elif weekday == '3':
+#		return '0.2'
+#	elif weekday == '4':
+#		return '0.3'
+#	elif weekday == '5':
+#		return '0.4'
+#	elif weekday == '6':
+#		return '0.8'
+#	else:
+#		return '1.0'
+
 def handle_holiday(holiday):
 	holiday = str(holiday)
 	if holiday == '-1':
 		holiday = '1'
 	elif holiday == '1':
-		holiday = '0.5'
+		holiday = '0.21'
 	else:
 		holiday = '0'
-	return (holiday+' ')*3+holiday
+	return (holiday+' ')*1+holiday
+	#return holiday
 
 #def handle_weekday(weekday):
 #	weekday = str(weekday)
