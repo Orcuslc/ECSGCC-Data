@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
-path = '../../modified-data/dailyDATA.csv'
-save_path = '../../modified-data/simp_daily_data.csv'
+path = '../../modified-data/dailyDATA_clean.csv'
+save_path = '../../modified-data/simp_daily_data_2.csv'
 data = pd.read_csv(path, encoding='gbk')
 
 

@@ -12,7 +12,7 @@ data = pd.read_csv(path, index_col = 'date')
 ############################################
 MAX_LOAD = 10000
 MIN_LOAD = 10000
-MAX_TEMP = 28
+MAX_TEMP = 29
 DAYS_BACK = 6
 
 def scale_load(data):
@@ -26,36 +26,56 @@ def scale_load(data):
 def handle_weekday(weekday):
 	weekday = str(weekday)
 	if weekday == '1':
-		return '0 0 0 0 0 1'
+		res = '0 0 0 0 0 1'
 	elif weekday == '2':
-		return '0 0 0 0 1 0'
+		res = '0 0 0 0 1 0'
 	elif weekday == '3':
-		return '0 0 0 1 0 0'
+		res = '0 0 0 1 0 0'
 	elif weekday == '4':
-		return '0 0 1 0 0 0'
+		res = '0 0 1 0 0 0'
 	elif weekday == '5':
-		return '0 1 0 0 0 0'
+		res = '0 1 0 0 0 0'
 	elif weekday == '6':
-		return '1 0 0 0 0 0'
+		res = '1 0 0 0 0 0'
 	else:
-		return '0 0 0 0 0 0'
+		res = '0 0 0 0 0 0'
+	return res
 
-#def handle_weekday(weekday):
-#	weekday = str(weekday)
-#	if weekday == '1':
-#		return '0'
-#	elif weekday == '2':
-#		return '0.1'
-#	elif weekday == '3':
-#		return '0.2'
-#	elif weekday == '4':
-#		return '0.3'
-#	elif weekday == '5':
-#		return '0.4'
-#	elif weekday == '6':
-#		return '0.8'
-#	else:
-#		return '1.0'
+
+# def handle_weekday(weekday):
+# 	weekday = str(weekday)
+# 	return weekday
+	# if weekday == '1':
+	# 	return '0 0 0 0 0 0 1'
+	# elif weekday == '2':
+	# 	return '0 0 0 0 0 1 0'
+	# elif weekday == '3':
+	# 	return '0 0 0 0 1 0 0'
+	# elif weekday == '4':
+	# 	return '0 0 0 1 0 0 0'
+	# elif weekday == '5':
+	# 	return '0 0 1 0 0 0 0'
+	# elif weekday == '6':
+	# 	return '0 1 0 0 0 0 0'
+	# else:
+	# 	return '1 0 0 0 0 0 0'
+
+# def handle_weekday(weekday):
+# 	weekday = str(weekday)
+# 	if weekday == '1':
+# 		return '0'
+# 	elif weekday == '2':
+# 		return '0.1'
+# 	elif weekday == '3':
+# 		return '0.2'
+# 	elif weekday == '4':
+# 		return '0.3'
+# 	elif weekday == '5':
+# 		return '0.4'
+# 	elif weekday == '6':
+# 		return '0.8'
+# 	else:
+# 		return '1.0'
 
 def handle_holiday(holiday):
 	holiday = str(holiday)
@@ -79,6 +99,9 @@ def handle_holiday(holiday):
 #	else:
 #		return '1'
 
+# def handle_temp(temperature, index):
+# 	return 
+
 def write(data):
 	with open(attr_path, 'w') as f:
 		for index in range(DAYS_BACK, len(data)):
@@ -87,7 +110,10 @@ def write(data):
 			holiday = handle_holiday(holiday)
 			for j in range(0, DAYS_BACK+1):
 				f.write(str(data['max_load'].iloc[index-j])+ ' ')
-			f.write(str(data['temperature'].iloc[index])+' '+weekday+' '+holiday+'\n')
+			for j in range(0, 1):
+				f.write(str(data['temperature'].iloc[index-j]) + ' ')
+			# f.write(str(data['temperature'].iloc[index])+weekday+' '+holiday+'\n')
+			f.write(weekday+' '+holiday+'\n')
 	f.close()
 			#f.write(+' '+str(index['max_load'])+' '+str(['temperature']+' '))
 
