@@ -10,9 +10,9 @@ data = pd.read_csv(path, index_col = 'date')
 #	MAX-LOAD = 40000					   #
 #	MAX-TEMP = 45						   #
 ############################################
-MAX_LOAD = 20000
+MAX_LOAD = 10000
 MIN_LOAD = 10000
-MAX_TEMP = 10
+MAX_TEMP = 28
 DAYS_BACK = 6
 
 def scale_load(data):

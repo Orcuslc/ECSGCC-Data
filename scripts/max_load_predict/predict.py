@@ -1,12 +1,15 @@
 from sklearn.svm import SVR
 from matplotlib import pyplot as plt
+from matplotlib import dates as mdt
 import numpy as np
+import datetime as dt
 
 #############################################
 #	Configurations							#
 #############################################
 C = 4
 gamma = 2**-4
+DAYS_BACK = 6
 attr_path = '../../modified-data/attr.txt'
 model_path = '../../modified-data/model.txt'
 with open(attr_path) as f:
@@ -44,6 +47,25 @@ def test(n):
 	clf.fit(x1, y1)
 	a = clf.predict(x2)
 	calc_err(a, y2)
+
+	org = dt.date(2011, 1, 1)
+	td = dt.date(2011, 1, 2) - org
+	begin = org + td*(n)
+	date_list = [org+td*i for i in range(n+DAYS_BACK, 2032)]
+	print(len(date_list))
+
+
+	p1 = plt.subplot(211)
+	line1, = p1.plot(date_list, y2, label = 'actual', color = 'r')
+	line2, = p1.plot(date_list, a, label = 'simulation', color = 'b')
+	p1.legend(handles = [line1, line2])
+
+	p2 = plt.subplot(212)
+	line3, = p2.plot(date_list, abs(y2-a)/y2, label = 'error', color = 'g')
+	p2.legend(handles = [line3])
+	p1.grid(True)
+	p2.grid(True)
+	plt.show()
 
 if __name__ == '__main__':
 	test(730)
