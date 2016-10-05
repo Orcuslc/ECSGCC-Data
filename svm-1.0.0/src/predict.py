@@ -1,9 +1,11 @@
+import sys
+sys.path.insert(0, '../')
 from sklearn.svm import SVR
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdt
 import numpy as np
 import datetime as dt
-from conf import *
+from src.conf import *
 
 str2float = lambda alist: [float(i) for i in alist]
 
@@ -100,7 +102,7 @@ class Predictor:
 			If `n` < 0.
 		"""
 		with open(attr_path) as f:
-			data = f.read().split('\n')
+			data = f.read().split('\n')[:-1]
 		for index in range(len(data)):
 			data[index] = data[index].split(' ')[:-1]
 		if n < 0:
@@ -217,7 +219,7 @@ class Predictor:
 		maxerr = max(err)
 		error_num = []
 		for i in error_list:
-			error_num.append(len(np.where(err > error_list[i])[0]))
+			error_num.append(len(np.where(err > i)[0]))
 		return avgerr, maxerr, error_num
 
 	def plot(self, begin, pred, real = None):

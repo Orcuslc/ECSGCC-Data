@@ -1,6 +1,8 @@
+import sys
+sys.path.insert(0, '../')
 import numpy as np
 import pandas as pd
-from conf import *
+from src.conf import *
 
 def scale_data(data):
 	"""
@@ -134,7 +136,7 @@ def write_attr(data_path = DATA_PATH, attr_path = ATTR_PATH):
 	-------
 	Nothing
 	"""
-	data = pd.read_csv(data_path, index_col = 'date')
+	data = scale_data(pd.read_csv(data_path, index_col = 'date'))
 	with open(attr_path, 'w') as f:
 		for index in range(DAYS_BACK, len(data)):
 			weekday = handle_weekday(data['weekday'].iloc[index])
