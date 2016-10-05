@@ -35,11 +35,8 @@ class Predictor:
 	Public:
 		self.clf : SVR model
 			generated and trained by self.train()
-
-		self.
-
 	"""
-	def __init__(self, attr_path, n):
+	def __init__(self, attr_path, n = 0):
 		"""
 		Initialize self.
 
@@ -48,28 +45,33 @@ class Predictor:
 		attr_path : string
 			The path of attributes.
 
-		n : int
-			The number of record points;
-			The first n points are used as training data, and the latter points as testing data(if exists)
+		n : int, optional
+			Default: 0
+			The number of record points left for testing;
+			The first `len - n` points are used as training data, and the latter points as testing data(if exists)
 
 		Returns of `self._read()`
 		-------
 		data : matrix-like
 			Each line of `data` is a record point.
 			The first n rows of data is regarded as training data, the `n:-1` rows of `data` as testing data.
-			If `n` == `len(data) - 1`:
+			If `n` == `0`:
 				we regard test data as an empty list.
 
 		Raises
 		------
 		IndexError:
-			If `n` >= `len(data)`.
+			If `n` < 0.
 		"""
 		self._training_data, self._testing_data = self._read(attr_path, n)
 		self._training_y = [float(record[0]) for record in self._training_data]
 		self._training_x = [str2float(record[1:]) for record in self._training_data]
-		self._testing_x = [str2float(record[1:]) for record in self._testing_data]
-		self._testing_y = [float(record[0]) for record in self._testing_data]
+		if len(self._testing_data) == 0:
+			self._testing_x = None
+			self._testing_y = None
+		else:
+			self._testing_x = [str2float(record[1:]) for record in self._testing_data]
+			self._testing_y = [float(record[0]) for record in self._testing_data]
 
 	def _read(self, attr_path, n):
 		"""
@@ -82,28 +84,30 @@ class Predictor:
 			The path of attributes.
 
 		n : int
-			The number of training data points.
+			The number of testing data points.
 
 		Returns
 		-------
 		data : matrix-like
 			Each line of `data` is a record point.
-			The first `n` rows of `data` is regarded as training data, the `n:-1` rows of `data` as testing data.
-			If `n` == `len(data) - 1`:
+			The last `n` rows of `data` is regarded as testing data, the `0:len-n` rows of `data` as training data.
+			If `n` == `0`:
 				we regard test data as an empty list.
 
 		Raises
 		------
 		IndexError:
-			If n >= len(data).
+			If `n` < 0.
 		"""
 		with open(attr_path) as f:
 			data = f.read().split('\n')
 		for index in range(len(data)):
 			data[index] = data[index].split(' ')[:-1]
-		if n >= len(index):
-			raise IndexError("n must be less than the number of record points.")
-		return data[:n], data[n:-1]
+		if n < 0:
+			raise IndexError("n must be larger than 0.")
+		if n == 0:
+			return data[:], []
+		return data[:-n], data[-n:]
 
 	def train(self):
 		"""
