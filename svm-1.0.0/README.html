@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf-8"><style>body {
   width: 45em;
   border: 1px solid #ddd;
   outline: 1300px solid #fff;
@@ -1014,26 +1016,50 @@ body .markdown-body
     page-break-after: avoid;
   }
 }
-</style><title>README</title></head><body><article class="markdown-body"><h1 id="read-me"><a name="user-content-read-me" href="#read-me" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><font color=#0099ff size = 20 face="Consolas"> Read Me <img align="absmiddle" alt=":+1:" class="emoji" height="20px" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f44d.png" title=":+1:" width="20px" /></font></h1>
-<p><font color=#0099ff size=6 face="Consolas"> About The Module</font></p>
-<p><font face = "Consolas">In this module, we use SVR model to perform max daily load prediction. <br />
-The module consists of three sub-folders: <br />
-<code>/src</code>: Source codes:<br />
-&emsp;&emsp; <code>/conf.py</code>: configuration file<br />
-&emsp;&emsp; <code>/prep_attr.py</code>: functions for preparing attributes for prediction<br />
-&emsp;&emsp; <code>/predict.py</code>: containing a class of Predictor<br />
-<code>/util</code>: Utilities:<br />
-&emsp;&emsp; <code>/one_step_predict.py</code>: functions for /one-step prediction<br />
-&emsp;&emsp; <code>/multi_step_prediction.py</code>: functions for multi-step prediction<br />
-<code>/data</code>: Data for prediction<br />
+</style><title>readme-bkup</title></head><body><article class="markdown-body"><p><br>
+<style type="text/css"><br />
+body {font-family: Consolas;}<br />
+</style><br>
+</p>
+<h1 id="read-me"><a name="user-content-read-me" href="#read-me" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><font color="#0099ff" face="Consolas" size="20"> Read Me <img alt=":+1:" class="emoji" src="README_files/1f44d.png" title=":+1:" align="absmiddle" height="20px" width="20px"></font></h1>
+<p><font color="#0099ff" face="Consolas" size="6"> About The Module</font></p>
+<p><font face="Consolas">In this module, we use SVR model to perform max daily load prediction. <br>
+The module consists of three sub-folders: <br>
+<code>/src</code>: Source codes:<br>
+   <code>/conf.py</code>: configuration file<br>
+   <code>/prep_attr.py</code>: functions for preparing attributes for prediction<br>
+   <code>/predict.py</code>: containing a class of Predictor<br>
+<code>/util</code>: Utilities:<br>
+   <code>/one_step_predict.py</code>: functions for /one-step prediction<br>
+   <code>/multi_step_prediction.py</code>: functions for multi-step prediction<br>
+<code>/data</code>: Data for prediction<br>
 </font></p>
-<hr />
-<p><font color=#0099ff size=6 face="Consolas"> Dependency</font><br />
-<em> <font face="Consolas">Python 3</font><br />
-</em> numpy<br />
-<em> matplotlib<br />
-</em> scikit-learn<br />
-* pandas<br />
+<hr>
+<p><font color="#0099ff" face="Consolas" size="6"> Dependency</font><br>
+<font face="Consolas"><br>
+   Python 3.0+<br>
+   scikit-learn<br>
+   numpy<br>
+   matplotlib<br>
+   pandas<br>
 </font></p>
-<hr />
-<p><font color=#0099ff size=6 face="Consolas"> Usage</font></p></article></body></html>
+<hr>
+<p><font color="#0099ff" face="Consolas" size="6"> Usage</font><br>
+<font face="Consolas"><br>
+1. Go to <code>/src/conf.py</code> and change the configuration info there. Notice: The configuration for <code>predict.py</code> should not be changed.<br>
+2. Write information in <code>/data/simp_daily_data.csv</code> or the path you write in (1). The data structure should be as follows:<br>
+<code>date(2016/01/01), yesterday's max load(26000), today's average 
+temperature(29.0), weekday(1~7), holiday(1 for weekends, 0 for 
+non-holidays, -1 for long holidays)</code><br>
+Notice: Always keep an empty line at the end of the file.     <br>
+3. Go to <code>/util</code>, open the console and <br>
+   <code>python3 one_step_predict.py ATTR_PATH</code>.<br>
+If attr is wrote in <code>ATTR_PATH</code> in (1), then <code>ATTR_PATH</code> is not necessary.<br>
+</font></p>
+<hr>
+<p><font color="#0099ff" face="Consolas" size="6"> Contributor</font><br>
+<font face="Consolas"><br>
+Chuan Lu<br>
+Homepage: <a href="http://chuanlu.xyz/">http://chuanlu.xyz</a><br>
+GitHub: <a href="https://github.com/orcuslc">https://github.com/orcuslc</a><br>
+Email: <a href="mailto:chuanlu13@fudan.edu.cn">chuanlu13@fudan.edu.cn</a></font></p></article></body></html>
