@@ -1,8 +1,8 @@
 import os, sys
 
-site_set_path = '../../Site-Data/site_set.txt'
-secinfo_path = '../../Site-Data/secinfo_cleaned.txt'
-matrix_path = '../../Site-Data/matrix.txt'
+site_set_path = '../../Data/Site-Data/site_set.txt'
+secinfo_path = '../../Data/Site-Data/secinfo_cleaned.txt'
+matrix_path = '../../Data/Site-Data/matrix.txt'
 
 with open(site_set_path) as f:
 	site_set = f.read().split('\n')

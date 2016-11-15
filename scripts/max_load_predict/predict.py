@@ -10,8 +10,8 @@ import datetime as dt
 C = 4
 gamma = 2**-4
 DAYS_BACK = 6
-attr_path = '../../modified-data/attr.txt'
-model_path = '../../modified-data/model.txt'
+attr_path = '../../Data/modified-data/attr.txt'
+model_path = '../../Data/modified-data/model.txt'
 with open(attr_path) as f:
 	data = f.read().split('\n')
 for index in range(len(data)):
