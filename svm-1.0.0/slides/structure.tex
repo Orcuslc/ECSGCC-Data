@@ -1,0 +1,46 @@
+\documentclass[10pt]{beamer}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{epstopdf}
+\usepackage{graphicx}
+\usepackage{clrscode3e}
+\DeclareGraphicsExtensions{.eps,.ps,.jpg,.bmp}
+\usepackage{color} % Required for custom colors
+\definecolor{slateblue}{rgb}{0.17,0.22,0.34}
+
+\newenvironment{itemize-noindent}
+{\setlength{\leftmargini}{0em}\begin{itemize}}
+{\end{itemize}}
+
+\newcommand{\sqbullet}{~\vrule height .8ex width .6ex depth -.05ex} % Custom square bullet point 
+
+
+\newcommand{\tbf}[1]{\textbf{#1}}
+\newcommand{\tit}[1]{\textit{#1}}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\blue}[1]{\color{blue}{#1}}
+\newcommand{\red}[1]{\color{red}{#1}}
+\newcommand{\sblue}[1]{\color{slateblue}{#1}}
+\newcommand{\n}{\\[5pt]}
+\newcommand{\tr}{^\top}
+\newcommand{\vt}[1]{
+\Vert #1 \Vert
+}
+\newcommand{\bra}[5]{
+#1=\left\{
+\begin{aligned}
+#2 ,&\quad #4 \\
+#3 ,&\quad #5
+\end{aligned}
+\right.
+}
+\newcommand{\both}[2]{
+	\left\{
+	\begin{aligned}
+	#1 \\
+	#2
+	\end{aligned}
+	\right.
+}
